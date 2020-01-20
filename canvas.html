@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+        name="viewport">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <title>TITLE</title>
+</head>
+<style>
+</style>
+
+<body>
+<div class="circle-container">
+  <canvas id="canvas" class="canvas" width="200" height="200"></canvas>
+  <i class="icon-go">开始</i>
+</div>
+<script src="assets/js/utils.js"></script>
+<script>
+  function Circle(num) {
+    this.canvas = document.querySelector('#canvas');
+		this.ctx = this.canvas.getContext('2d');
+		this.width = +this.canvas.getAttribute('width');
+		this.height = +this.canvas.getAttribute('height');
+		this.center = {x: this.width / 2, y: this.height / 2};
+		this.radius = this.center.x - 18;
+		this.num = num;
+		
+		this.drawArc()
+	}
+	Circle.prototype.drawArc = function() {
+		for (let i = 0 ; i < this.num; i++) {
+			this.ctx.beginPath();
+			this.ctx.moveTo(this.center.x, this.center.y);
+			const start = i * 2 * Math.PI / this.num;
+			const end = (i + 1) * 2 * Math.PI / this.num;
+			this.ctx.arc(this.center.x, this.center.y, this.radius, start, end);
+			this.ctx.strokeStyle = 'transparent';
+			this.ctx.closePath();
+			this.ctx.fillStyle = getRandomColor();
+			this.ctx.fill();
+		}
+	}
+	
+	Circle.prototype.drawIcons = function() {
+  
+  }
+ 
+	new Circle(6);
+ 
+</script>
+</body>
+</html>

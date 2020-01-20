@@ -1,0 +1,41 @@
+body {
+  margin: 0;
+}
+.circle-container {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  top: 0;
+  left: 0;
+  background-size: contain;
+  animation: convert 0.8s linear infinite;
+}
+.icon-go {
+  position: absolute;
+  top: 70px;
+  left: 70px;
+  width: 60px;
+  height: 60px;
+  background: url("../img/wheel-start.png");
+  background-size: contain;
+  text-align: center;
+  line-height: 60px;
+  color: #fcfcfc;
+  font-style: normal;
+  font-size: 14px;
+  cursor: pointer;
+}
+@keyframes convert {
+  0% {
+    background-image: url("../img/wheel-bg1.png");
+  }
+  50% {
+    background-image: url("../img/wheel-bg1.png");
+  }
+  51% {
+    background-image: url("../img/wheel-bg2.png");
+  }
+  100% {
+    background-image: url("../img/wheel-bg2.png");
+  }
+}
