@@ -14,7 +14,7 @@
 
 <body>
 <div class="circle-container">
-  <canvas id="canvas" class="canvas" width="200" height="200"></canvas>
+  <canvas id="canvas" class="canvas" width="300" height="300"></canvas>
   <i class="icon-go">开始</i>
 </div>
 <script src="assets/js/utils.js"></script>
@@ -25,10 +25,15 @@
 		this.width = +this.canvas.getAttribute('width');
 		this.height = +this.canvas.getAttribute('height');
 		this.center = {x: this.width / 2, y: this.height / 2};
-		this.radius = this.center.x - 18;
+		this.radius = this.center.x - 25;
+		this.innerRadius = this.radius - 25;
 		this.num = num;
+		this.iconUrls = [];
+    for (let i = 0; i < 6; i++) {
+			this.iconUrls.push(`assets/img/${i + 1}.png`);
+    };
 		
-		this.drawArc()
+		this.drawArc();
 	}
 	Circle.prototype.drawArc = function() {
 		for (let i = 0 ; i < this.num; i++) {
@@ -42,10 +47,39 @@
 			this.ctx.fillStyle = getRandomColor();
 			this.ctx.fill();
 		}
+		
+		/*todo start*/
+		// this.ctx.translate(this.center.x, this.center.y);
+		// this.ctx.rotate(60*Math.PI/180);
+		/*let img = new Image();
+		img.src = this.iconUrls[0];
+		img.onload = () => {
+			this.ctx.drawImage(img, this.innerRadius, 16, 60, 60);
+		}*/
+		
+		let angle = 60 * 2 * Math.PI / 360;
+		let x = this.radius - this.innerRadius * Math.sin(angle) + 30;
+		let y = this.radius - this.innerRadius * Math.cos(angle) + 30;
+		this.ctx.translate(x, y);
+		
+		let img1 = new Image();
+		img1.src = this.iconUrls[1];
+		img1.onload = () => {
+			this.ctx.drawImage(img1, 0, 0, 60, 60);
+		}
+  
+		/*todo end*/
 	}
 	
 	Circle.prototype.drawIcons = function() {
-  
+  	let num = 0;
+		this.iconUrls.forEach(url => {
+			let img = new Image();
+			img.src = url;
+			img.onload = () => {
+        // this.ctx.drawImage(img, )
+      }
+    })
   }
  
 	new Circle(6);
