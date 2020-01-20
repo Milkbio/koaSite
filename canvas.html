@@ -35,14 +35,15 @@
 		this.radius = this.center.x;
 		this.num = num;
 		this.iconUrls = [];
-    for (let i = 0; i < 6; i++) {
-			this.iconUrls.push(`assets/img/${i + 1}.png`);
-    };
+		this.iconSource = [];
 		
 		this.drawArc();
 	}
 	Circle.prototype.drawArc = function() {
 		for (let i = 0 ; i < this.num; i++) {
+			/*小图标url*/
+			this.iconUrls.push(`assets/img/${i + 1}.png`);
+			
 			/*画扇形*/
 			this.ctx.beginPath();
 			this.ctx.moveTo(this.center.x, this.center.y);
@@ -54,71 +55,46 @@
 			this.ctx.fillStyle = getRandomColor();
 			this.ctx.fill();
 			/*画扇形end*/
-			
-			/*放小图标*/
-			/*let angle = (2 * i + 1) * 30 * Math.PI / 180;
-			let x = this.radius - this.radius * Math.sin(angle) + 40 * Math.sin(angle);
-			let y = this.radius - this.radius * Math.cos(angle) + 40 * Math.cos(angle);
-			yAxis.style.left = x + 'px';
-			xAxis.style.top = y + 'px';
-			
-			this.ctx.save();
-			this.ctx.translate(x, y);
-			this.ctx.rotate(-angle);
-			
-			let img1 = new Image();
-			img1.src = this.iconUrls[i];
-			img1.onload = () => {
-				this.ctx.drawImage(img1, -30, -30, 60, 60);
-				this.ctx.restore();
-			}*/
 		}
 		
-		/*放小图标*/
-		let j = 4;
-		let angle = (2 * j + 1) * 30 * Math.PI / 180;
-		let x = this.radius - this.radius * Math.sin(angle) + 40 * Math.sin(angle);
-		let y = this.radius - this.radius * Math.cos(angle) + 40 * Math.cos(angle);
-		yAxis.style.left = x + 'px';
-		xAxis.style.top = y + 'px';
-		
-		this.ctx.translate(x, y);
-		this.ctx.rotate(-angle);
-		
-		let img1 = new Image();
-		img1.src = this.iconUrls[j];
-		img1.onload = () => {
-			this.ctx.drawImage(img1, -30, -30, 60, 60);
-		}
-    
-    let j1 = 5;
-		let angle1 = (2 * j1 + 1) * 30 * Math.PI / 180;
-		let x1 = this.radius - this.radius * Math.sin(angle1) + 40 * Math.sin(angle1);
-		let y1 = this.radius - this.radius * Math.cos(angle1) + 40 * Math.cos(angle1);
-		yAxis.style.left = x1 + 'px';
-		xAxis.style.top = y1 + 'px';
-		
-		this.ctx.translate(x1, y1);
-		this.ctx.rotate(-angle1);
-		
-		let img2 = new Image();
-		img2.src = this.iconUrls[j1];
-		img2.onload = () => {
-			this.ctx.drawImage(img2, -30, -30, 60, 60);
-		}
-		
+		/*画小图标*/
+    this.drawIcons()
 	}
 	
-	Circle.prototype.drawIcons = function() {
+  /*
+  * 加载小图标，必须得等icon load后才能drawImage*/
+	Circle.prototype.loadIcons = function(callback) {
   	let num = 0;
 		this.iconUrls.forEach(url => {
 			let img = new Image();
 			img.src = url;
 			img.onload = () => {
-        // this.ctx.drawImage(img, )
+        num++;
+				this.iconSource.push(img);
+        if (num >= 6) {
+        	callback && callback();
+        }
       }
     })
   }
+
+	Circle.prototype.drawIcons = function() {
+		this.loadIcons(() => {
+			this.iconSource.forEach((img, i) => {
+				let angle = (2 * i + 1) * 30 * Math.PI / 180;
+				let x = this.radius - this.radius * Math.sin(angle) + 40 * Math.sin(angle);
+				let y = this.radius - this.radius * Math.cos(angle) + 40 * Math.cos(angle);
+				yAxis.style.left = x + 'px';
+				xAxis.style.top = y + 'px';
+				
+				this.ctx.save();
+				this.ctx.translate(x, y);
+				this.ctx.rotate(-angle);
+				this.ctx.drawImage(img, -30, -30, 60, 60);
+				this.ctx.restore();
+      })
+		})
+	}
  
 	new Circle(6);
  
