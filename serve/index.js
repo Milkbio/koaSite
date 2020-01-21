@@ -8,21 +8,17 @@ const router = require('../routes/')
 
 const app = new koa();
 app.use(logger());
+
 // 静态资源文件
 app.use(static(path.resolve(__dirname + '/..')));
 
+// 设置模板
 app.use(views(__dirname + '/../views', {
 	extension: 'ejs'
 }));
 
-app.use(async (ctx, next) => {
-	await ctx.render('index', {
-		title: 'hahaha',
-		body: 'emmm'
-	})
-})
 
-// app.use(router.routes());
+app.use(router.routes());
 
 const port = 3000;
 
