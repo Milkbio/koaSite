@@ -2,6 +2,58 @@
 <html lang="en">
 <%- include('header') -%>
 <body>
-  <%=body%>
+<script type="text/javascript" src="/public/js/jquery-3.4.1.min.js"></script>
+<script type="text/javascript">
+	$(document).ready(function () {
+		var canvas = $("#myCanvas");
+		var context = canvas.get(0).getContext("2d");
+
+		canvas.attr("width", $(window).get(0).innerWidth);
+		canvas.attr("height", $(window).get(0).innerHeight);
+
+		context.fillStyle = "saddlebrown";
+		context.fillRect(0, 0, canvas.width(), canvas.height());
+
+		var playMainloop = true;
+
+		var buttonStart = $("#startMainLoop");
+		var buttonStop = $("#stopMainLoop");
+
+		var x = 0;
+		buttonStart.hide();
+		buttonStart.click(function () {
+			$(this).hide();
+			buttonStop.show();
+			playMainloop = true;
+			MainLoop();
+		});
+
+		buttonStop.click(function () {
+			$(this).hide();
+			buttonStart.show();
+			playMainloop = false;
+		});
+
+		function MainLoop() {
+			x++;
+			context.clearRect(0, 0, canvas.width(), canvas.height());
+
+			context.fillRect(x, 250, 50, 50);
+			if (playMainloop) {
+				setTimeout(MainLoop, 33);
+			}
+			;
+		};
+		MainLoop();
+
+	})
+</script>
+<div>
+    <button id="startMainLoop" style="background-color: red">Start</button>
+</div>
+<div>
+    <button id="stopMainLoop" style="background-color: sandybrown">Stop</button>
+</div>
+<canvas id="myCanvas"></canvas>
 </body>
 </html>
