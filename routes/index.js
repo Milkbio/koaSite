@@ -6,4 +6,10 @@ router.get('/', async (ctx, next) => {
 	})
 });
 
+router.get('/canvas', async (ctx, next) => {
+	await ctx.render('../views/canvas', {
+		title: '首页'
+	})
+});
+
 module.exports = router;

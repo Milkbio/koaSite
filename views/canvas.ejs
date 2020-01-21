@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="public/css/style.css">
+</head>
+<body>
+<div class="circle-container">
+  <div class="canvas-container">
+    <canvas id="canvas" class="canvas" width="250" height="250"></canvas>
+    <div class="x-axis" id="xAxis"></div>
+    <div class="y-axis" id="yAxis"></div>
+  </div>
+  <i class="icon-go">开始</i>
+</div>
+<script src="/public/js/utils.js"></script>
+<script>
+  let xAxis = document.getElementById('xAxis');
+  let yAxis = document.getElementById('yAxis');
+  
+  function Circle(num) {
+    this.canvas = document.querySelector('#canvas');
+		this.ctx = this.canvas.getContext('2d');
+		this.width = +this.canvas.getAttribute('width');
+		this.height = +this.canvas.getAttribute('height');
+		this.center = {x: this.width / 2, y: this.height / 2};
+		this.radius = this.center.x;
+		this.num = num;
+		this.iconUrls = [];
+		this.iconSource = [];
+		
+		this.drawArc();
+	}
+	Circle.prototype.drawArc = function() {
+		for (let i = 0 ; i < this.num; i++) {
+			/*小图标url*/
+			this.iconUrls.push(`/public/img/${i + 1}.png`);
+			
+			/*画扇形*/
+			this.ctx.beginPath();
+			this.ctx.moveTo(this.center.x, this.center.y);
+			const start = (2 * i + 1) * Math.PI / this.num;
+			const end = (2 * i + 3) * Math.PI / this.num;
+			this.ctx.arc(this.center.x, this.center.y, this.radius, start, end);
+			this.ctx.strokeStyle = 'transparent';
+			this.ctx.closePath();
+			this.ctx.fillStyle = getRandomColor();
+			this.ctx.fill();
+			/*画扇形end*/
+		}
+		
+		/*画小图标*/
+    this.drawIcons()
+	}
+	
+  /*
+  * 加载小图标，必须得等icon load后才能drawImage*/
+	Circle.prototype.loadIcons = function(callback) {
+  	let num = 0;
+		this.iconUrls.forEach(url => {
+			let img = new Image();
+			img.src = url;
+			img.onload = () => {
+        num++;
+				this.iconSource.push(img);
+        if (num >= 6) {
+        	callback && callback();
+        }
+      }
+    })
+  }
+
+	Circle.prototype.drawIcons = function() {
+		this.loadIcons(() => {
+			this.iconSource.forEach((img, i) => {
+				let angle = (2 * i + 1) * 30 * Math.PI / 180;
+				let x = this.radius - this.radius * Math.sin(angle) + 40 * Math.sin(angle);
+				let y = this.radius - this.radius * Math.cos(angle) + 40 * Math.cos(angle);
+				yAxis.style.left = x + 'px';
+				xAxis.style.top = y + 'px';
+				
+				this.ctx.save();
+				this.ctx.translate(x, y);
+				this.ctx.rotate(-angle);
+				this.ctx.drawImage(img, -30, -30, 60, 60);
+				this.ctx.restore();
+      })
+		})
+	}
+ 
+	new Circle(6);
+ 
+</script>
+</body>
+</html>
