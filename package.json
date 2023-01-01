@@ -20,6 +20,6 @@
     "koa-views": "^6.2.1",
     "koa-webpack-dev-middleware": "^2.0.2",
     "koa-webpack-hot-middleware": "^1.0.3",
-    "webpack": "^4.41.5"
+    "webpack": "^5.75.0"
   }
 }
